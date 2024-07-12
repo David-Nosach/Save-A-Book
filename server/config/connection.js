@@ -1,8 +1,12 @@
-const mongoose = require("mongoose"); // Import the mongoose library
+const mongoose = require("mongoose");
 
-// Connect to the MongoDB database using the URI from environment variables or fallback to a local database
+// Use the MONGODB_URI environment variable if available, otherwise fallback to a local MongoDB instance
 mongoose.connect(
-  process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/googlebooks"
+  process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/googlebooks",
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  }
 );
-// Export the mongoose connection to be used in other parts of the application
+
 module.exports = mongoose.connection;
