@@ -1,16 +1,19 @@
+/* Apply the 'Rubik' font family to the entire body of the document */
 body {
-  font-family: 'Rubik', sans-serif;
+  font-family: "Rubik", sans-serif;
 }
 
+/* Apply the 'Rubik Mono One' font family to all heading elements (h1 to h6) */
 h1,
 h2,
 h3,
 h4,
 h5,
 h6 {
-  font-family: 'Rubik Mono One', sans-serif;
+  font-family: "Rubik Mono One", sans-serif;
 }
 
+/* Define styles for elements with the 'small' class */
 .small {
   font-weight: 300;
   font-style: italic;

@@ -8,6 +8,7 @@ const { typeDefs, resolvers } = require("./schemas");
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+// Function to start the Apollo server
 async function startApolloServer() {
   const server = new ApolloServer({
     typeDefs,
@@ -25,10 +26,12 @@ async function startApolloServer() {
     app.use(express.static(path.join(__dirname, "../client/build")));
   }
 
+  // Serve the React application
   app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, "../client/build/index.html"));
   });
 
+  // Start the database connection and server
   db.once("open", () => {
     app.listen(PORT, () => {
       console.log(`🌍 Now listening on localhost:${PORT}`);

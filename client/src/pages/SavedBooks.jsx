@@ -6,13 +6,19 @@ import { REMOVE_BOOK } from "../utils/mutations";
 import Auth from "../utils/auth";
 import { removeBookId } from "../utils/localStorage";
 
+// SavedBooks component
 const SavedBooks = () => {
+  // Fetch user data using the GET_ME query
   const { loading, data } = useQuery(GET_ME);
+  // useMutation hook for the removeBook mutation
   const [removeBook] = useMutation(REMOVE_BOOK);
 
+  // Get user data or initialize as an empty object
   const userData = data?.me || {};
 
+  // Handle book deletion
   const handleDeleteBook = async (bookId) => {
+    // Check if user is logged in and get the token
     const token = Auth.loggedIn() ? Auth.getToken() : null;
 
     if (!token) {
@@ -20,27 +26,32 @@ const SavedBooks = () => {
     }
 
     try {
+      // Execute the removeBook mutation
       await removeBook({
         variables: { bookId },
       });
 
+      // Remove the book ID from local storage
       removeBookId(bookId);
     } catch (err) {
       console.error(err);
     }
   };
 
+  // Show loading message while data is being fetched
   if (loading) {
     return <h2>LOADING...</h2>;
   }
 
   return (
     <>
+      {/* Header section */}
       <div fluid className="text-light bg-dark p-5">
         <Container>
           <h1>Viewing saved books!</h1>
         </Container>
       </div>
+      {/* Main content */}
       <Container>
         <h2 className="pt-5">
           {userData.savedBooks.length
@@ -50,6 +61,7 @@ const SavedBooks = () => {
             : "You have no saved books!"}
         </h2>
         <Row>
+          {/* Map over saved books and display each one */}
           {userData.savedBooks.map((book) => {
             return (
               <Col md="4" key={book.bookId}>

@@ -2,6 +2,7 @@ const { User } = require("../models");
 const { signToken } = require("../utils/auth");
 const { AuthenticationError } = require("apollo-server-express");
 
+// Define the resolvers for GraphQL queries and mutations
 const resolvers = {
   Query: {
     me: async (parent, args, context) => {
@@ -14,6 +15,7 @@ const resolvers = {
       throw new AuthenticationError("Not logged in");
     },
   },
+  // Define mutation resolvers
   Mutation: {
     login: async (parent, { email, password }) => {
       const user = await User.findOne({ email });
@@ -27,11 +29,13 @@ const resolvers = {
       const token = signToken(user);
       return { token, user };
     },
+    // Resolver for the 'addUser' mutation to register a new user
     addUser: async (parent, { username, email, password }) => {
       const user = await User.create({ username, email, password });
       const token = signToken(user);
       return { token, user };
     },
+    // Resolver for the 'saveBook' mutation to save a book to the user's account
     saveBook: async (parent, { book }, context) => {
       if (context.user) {
         const updatedUser = await User.findByIdAndUpdate(
@@ -43,6 +47,7 @@ const resolvers = {
       }
       throw new AuthenticationError("You need to be logged in!");
     },
+    // Resolver for the 'removeBook' mutation to remove a book from the user's account
     removeBook: async (parent, { bookId }, context) => {
       if (context.user) {
         const updatedUser = await User.findByIdAndUpdate(

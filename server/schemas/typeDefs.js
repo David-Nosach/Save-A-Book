@@ -1,5 +1,6 @@
-const { gql } = require("apollo-server-express");
+const { gql } = require("apollo-server-express"); // Import the gql tagged template function from Apollo Server
 
+// Define the GraphQL schema using the gql tagged template function
 const typeDefs = gql`
   type User {
     _id: ID

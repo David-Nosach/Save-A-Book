@@ -4,8 +4,10 @@ import { useMutation } from "@apollo/client";
 import { ADD_USER } from "../utils/mutations";
 import Auth from "../utils/auth";
 
+// SignupForm component
 const SignupForm = () => {
   const [userFormData, setUserFormData] = useState({
+    // State for form data, validation, and alert visibility
     username: "",
     email: "",
     password: "",
@@ -13,13 +15,16 @@ const SignupForm = () => {
   const [validated] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
 
+  // useMutation hook for the addUser mutation
   const [addUser] = useMutation(ADD_USER);
 
+  // Handle input changes to update form state
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setUserFormData({ ...userFormData, [name]: value });
   };
 
+  // Handle form submission
   const handleFormSubmit = async (event) => {
     event.preventDefault();
 
@@ -30,16 +35,18 @@ const SignupForm = () => {
     }
 
     try {
+      // Execute the addUser mutation
       const { data } = await addUser({
         variables: { ...userFormData },
       });
 
+      // Log in the user using the received token
       Auth.login(data.addUser.token);
     } catch (err) {
       console.error(err);
       setShowAlert(true);
     }
-
+    // Reset form data
     setUserFormData({
       username: "",
       email: "",
@@ -49,6 +56,7 @@ const SignupForm = () => {
 
   return (
     <>
+      {/* Form for user signup */}
       <Form noValidate validated={validated} onSubmit={handleFormSubmit}>
         <Alert
           dismissible
@@ -58,6 +66,7 @@ const SignupForm = () => {
         >
           Something went wrong with your signup!
         </Alert>
+        {/* Username input field */}
         <Form.Group className="mb-3">
           <Form.Label htmlFor="username">Username</Form.Label>
           <Form.Control
@@ -72,7 +81,7 @@ const SignupForm = () => {
             Username is required!
           </Form.Control.Feedback>
         </Form.Group>
-
+        {/* Email input field */}
         <Form.Group className="mb-3">
           <Form.Label htmlFor="email">Email</Form.Label>
           <Form.Control
@@ -88,6 +97,7 @@ const SignupForm = () => {
           </Form.Control.Feedback>
         </Form.Group>
 
+        {/* Password input field */}
         <Form.Group className="mb-3">
           <Form.Label htmlFor="password">Password</Form.Label>
           <Form.Control
@@ -102,6 +112,7 @@ const SignupForm = () => {
             Password is required!
           </Form.Control.Feedback>
         </Form.Group>
+        {/* Submit button */}
         <Button
           disabled={
             !(

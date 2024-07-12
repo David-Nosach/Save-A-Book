@@ -6,17 +6,22 @@ import Auth from "../utils/auth";
 import { searchGoogleBooks } from "../utils/API";
 import { saveBookIds, getSavedBookIds } from "../utils/localStorage";
 
+// SearchBooks component
 const SearchBooks = () => {
+  // State for searched books, search input, and saved book IDs
   const [searchedBooks, setSearchedBooks] = useState([]);
   const [searchInput, setSearchInput] = useState("");
   const [savedBookIds, setSavedBookIds] = useState(getSavedBookIds());
 
+  // useMutation hook for the saveBook mutation
   const [saveBook] = useMutation(SAVE_BOOK);
 
+  // useEffect to save book IDs to local storage when component unmounts
   useEffect(() => {
     return () => saveBookIds(savedBookIds);
   });
 
+  // Handle form submission to search for books
   const handleFormSubmit = async (event) => {
     event.preventDefault();
 
@@ -25,6 +30,7 @@ const SearchBooks = () => {
     }
 
     try {
+      // Fetch books from Google Books API
       const response = await searchGoogleBooks(searchInput);
 
       if (!response.ok) {
@@ -33,6 +39,7 @@ const SearchBooks = () => {
 
       const { items } = await response.json();
 
+      // Map book data to required format
       const bookData = items.map((book) => ({
         bookId: book.id,
         authors: book.volumeInfo.authors || ["No author to display"],
@@ -42,6 +49,7 @@ const SearchBooks = () => {
         link: book.volumeInfo.infoLink,
       }));
 
+      // Update state with searched books
       setSearchedBooks(bookData);
       setSearchInput("");
     } catch (err) {
@@ -49,6 +57,7 @@ const SearchBooks = () => {
     }
   };
 
+  // Handle saving a book
   const handleSaveBook = async (bookId) => {
     const bookToSave = searchedBooks.find((book) => book.bookId === bookId);
     const token = Auth.loggedIn() ? Auth.getToken() : null;
@@ -58,10 +67,12 @@ const SearchBooks = () => {
     }
 
     try {
+      // Execute the saveBook mutation
       await saveBook({
         variables: { book: bookToSave },
       });
 
+      // Update state with saved book ID
       setSavedBookIds([...savedBookIds, bookToSave.bookId]);
     } catch (err) {
       console.error(err);
@@ -70,6 +81,7 @@ const SearchBooks = () => {
 
   return (
     <>
+      {/* Header section */}
       <div className="text-light bg-dark p-5">
         <Container>
           <h1>Search for Books!</h1>
@@ -95,6 +107,7 @@ const SearchBooks = () => {
         </Container>
       </div>
 
+      {/* Main content */}
       <Container>
         <h2 className="pt-5">
           {searchedBooks.length
@@ -102,6 +115,7 @@ const SearchBooks = () => {
             : "Search for a book to begin"}
         </h2>
         <Row>
+          {/* Map over searched books and display each one */}
           {searchedBooks.map((book) => {
             return (
               <Col md="4" key={book.bookId}>
@@ -117,6 +131,7 @@ const SearchBooks = () => {
                     <Card.Title>{book.title}</Card.Title>
                     <p className="small">Authors: {book.authors}</p>
                     <Card.Text>{book.description}</Card.Text>
+                    {/* Button to save the book */}
                     {Auth.loggedIn() && (
                       <Button
                         disabled={savedBookIds?.some(
