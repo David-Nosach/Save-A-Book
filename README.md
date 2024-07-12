@@ -4,6 +4,8 @@
 
 Save-A-Book is a full-stack MERN application that allows users to search for books using the Google Books API, save their favorite books, and manage their saved books. The application uses a GraphQL API built with Apollo Server, a React front end, MongoDB for the database, and Node.js/Express.js for the server and API.
 
+<img width="1440" alt="Screenshot 2024-07-11 at 5 50 52 PM" src="https://github.com/user-attachments/assets/5df1eccb-e781-422b-809f-6e28f34b0af1">
+
 ## Table of Contents
 
 - [Save-A-Book](#save-a-book)
@@ -47,12 +49,10 @@ Save-A-Book is a full-stack MERN application that allows users to search for boo
    npm start
    ```
 2. Start the client:
-   '''bash
+
+   ```bash
    cd ../client
    npm start
-
-   ```
-
    ```
 
 3. Open your browser and navigate to http://localhost:3000
